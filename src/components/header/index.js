@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import {AlignJustify} from 'lucide-react'
 import Link from "next/link";
-function Header({user}){
+function Header({user,profileInfo}){
 
     const menuItems = [
         {
@@ -35,7 +35,7 @@ function Header({user}){
         {
             label:'Activity',
             path:'/activity',
-            show :  user
+            show :  profileInfo?.role === 'candidate'
 
         },
         {
