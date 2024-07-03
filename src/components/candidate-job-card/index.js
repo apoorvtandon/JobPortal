@@ -1,24 +1,39 @@
-'use client'
+"use client";
 
-import { Fragment, useState } from "react"
-import CommonCard from "../common-card"
-import JobIcon from "../job-icon"
-import { Button } from "../ui/button"
+import { Fragment, useState } from "react";
 import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-  } from "@/components/ui/drawer"
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+
+import CommonCard from "../common-card";
+import JobIcon from "../job-icon";
+import { Button } from "../ui/button";
+import { createJobApplicationAction } from "@/actions";
   
-
-function CandidateJobCard({jobItem}){
-    const [showJobDetailsDrawer, setShowJobDetailsDrawer] = useState(false);
-
+function CandidateJobCard({ jobItem, profileInfo, jobApplications }) {
+  const [showJobDetailsDrawer, setShowJobDetailsDrawer] = useState(false);
+  console.log(jobApplications, "yes");
+  console.log(jobItem.recruiterId, "jobItem");
+  async function handleApplyJob() {
+    await createJobApplicationAction({
+      recruiterUserID: jobItem?.recruiterId,
+      name: profileInfo?.candidateInfo?.name,
+      email: profileInfo?.email,
+      candidateUserID: profileInfo?.userId,
+      status: ['Applied'],
+      jobID: jobItem?._id,
+      jobAppliedDate: new Date().toLocaleDateString(),
+    }, '/jobs');
+    setShowJobDetailsDrawer(false);
+  }
+    
 
   return( 
         <Fragment>
@@ -30,7 +45,18 @@ function CandidateJobCard({jobItem}){
                 <div className="flex justify-between">
                     <DrawerTitle className='text-4xl font-extrabold text-gray-800 '>{jobItem?.title}</DrawerTitle>
                 <div className="flex gap-3">
-                    <Button>Apply</Button>
+                    <Button  className="disabled:opacity-65 flex h-11 items-center justify-center px-5" onClick={handleApplyJob} 
+                    disabled={
+                      jobApplications.findIndex(
+                        (item) => item.jobID === jobItem?._id
+                      ) > -1
+                        ? true
+                        : false
+                    }>{jobApplications.findIndex(
+                      (item) => item.jobID === jobItem?._id
+                    ) > -1
+                      ? "Applied"
+                      : "Apply"}</Button>
                     <Button onClick={()=>setShowJobDetailsDrawer(false)}>Cancel</Button>
                 </div>
                 </div>
