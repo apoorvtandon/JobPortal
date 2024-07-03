@@ -30,3 +30,9 @@ export async function createProfileAction(formData, pathToRevalidate) {
     const result = await Job.find({ recruiterId: id });  
     return JSON.parse(JSON.stringify(result));
   }
+
+  export async function fetchJobsForCandidateAction(){
+    await connectToDB();
+    const result = await Job.find({});  
+    return JSON.parse(JSON.stringify(result));
+  }
