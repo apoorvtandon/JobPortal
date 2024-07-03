@@ -8,7 +8,7 @@ import { initialPostNewJobFormData, postNewJobFormControls } from "@/utils";
 import { postNewJobAction } from "@/actions";
 
 function PostNewJob({ profileInfo, user }) {
-    console.log(user.id);
+     
   const [showJobDialog, setShowJobDialog] = useState(false);
   const [jobFormData, setJobFormData] = useState({
     ...initialPostNewJobFormData,

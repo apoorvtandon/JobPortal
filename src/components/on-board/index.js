@@ -11,7 +11,9 @@ import {
 } from "@/utils";
 import { useUser } from "@clerk/nextjs";
 import { createProfileAction } from "@/actions";
+import { createClient } from "@supabase/supabase-js";
  
+const supabaseClient = createClient('https://pfpysvpxxkgqyhazmrxi.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmcHlzdnB4eGtncXloYXptcnhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk5OTkwMzUsImV4cCI6MjAzNTU3NTAzNX0.vIENVhEghJVuYTjOJ-pdq3cRiWokB4k9_Qw3OYTacng')
 
 function OnBoard() {
   const [currentTab, setCurrentTab] = useState("candidate");
@@ -21,7 +23,7 @@ function OnBoard() {
   const [candidateFormData, setCandidateFormData] = useState(
     initialCandidateFormData
   );
- 
+  const [file, setFile] = useState(null);
 
   const currentAuthUser = useUser();
   const { user } = currentAuthUser;
@@ -30,7 +32,32 @@ function OnBoard() {
 
    
 
-  console.log(candidateFormData);
+  
+
+  function handleFileChange(event) {
+    event.preventDefault();
+    
+    setFile(event.target.files[0]);
+    
+  }
+  async function handleUploadPdfToSupabase() {
+    const { data, error } = await supabaseClient.storage
+      .from("job-board")
+      .upload(`/public/${file.name}`, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+    console.log(data, error);
+    if (data) {
+      setCandidateFormData({
+        ...candidateFormData,
+        resume: data.path,
+      });
+    }
+  }
+  useEffect(() => {
+    if (file) handleUploadPdfToSupabase();
+  }, [file]);
 
  
   function handleTabChange(value) {
@@ -51,7 +78,7 @@ function OnBoard() {
       (key) => candidateFormData[key].trim() !== ""
     );
   }
-
+console.log(candidateFormData)
   async function createProfile() {
     const data =
       currentTab === "candidate"
@@ -73,7 +100,7 @@ function OnBoard() {
     await createProfileAction(data, "/onboard");
   }
 
-  console.log(candidateFormData);
+   
 
   return (
     <div className="bg-white">
@@ -97,6 +124,7 @@ function OnBoard() {
             formControls={candidateOnboardFormControls}
             buttonText={"Onboard as candidate"}           
             isBtnDisabled={!handleCandidateFormValid()}
+            handleFileChange={handleFileChange}
           />
         </TabsContent>
         <TabsContent value="recruiter">
