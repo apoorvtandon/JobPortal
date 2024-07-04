@@ -4,7 +4,7 @@ import connectToDB from "@/database"
 import Application from "@/models/application";
 import Job from "@/models/job";
 import Profile from "@/models/profile";
-import { connect } from "mongoose";
+ 
 import { revalidatePath } from "next/cache";
 
 export async function createProfileAction(formData, pathToRevalidate) {
@@ -52,14 +52,12 @@ export async function createProfileAction(formData, pathToRevalidate) {
   }
   export async function fetchJobApplicationsForCandidate(candidateID) {
     await connectToDB();
-    const result = await Application.find({ candidateUserID: candidateID });
-  
+    const result = await Application.find({ candidateUserID: candidateID });  
     return JSON.parse(JSON.stringify(result));
   }
   export async function getCandidateDetailsByIDAction(currentCandidateID) {
     await connectToDB();
-    const result = await Profile.findOne({ userId: currentCandidateID });
-  
+    const result = await Profile.findOne({ userId: currentCandidateID });  
     return JSON.parse(JSON.stringify(result));
   }
 

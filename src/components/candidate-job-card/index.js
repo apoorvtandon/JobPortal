@@ -19,8 +19,8 @@ import { createJobApplicationAction } from "@/actions";
   
 function CandidateJobCard({ jobItem, profileInfo, jobApplications }) {
   const [showJobDetailsDrawer, setShowJobDetailsDrawer] = useState(false);
-  console.log(jobApplications, "yes");
-  console.log(jobItem.recruiterId, "jobItem");
+  console.log(jobApplications, "jobApplications");
+ 
   async function handleApplyJob() {
     await createJobApplicationAction({
       recruiterUserID: jobItem?.recruiterId,
