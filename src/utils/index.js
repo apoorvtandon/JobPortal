@@ -136,6 +136,22 @@ export const initialCandidateFormData = {
   linkedinProfile: "",
   githubProfile: "",
 };
+export const initialCandidateAccountFormData = {
+  name: "",
+  currentJobLocation: "",
+  preferedJobLocation: "",
+  currentSalary: "",
+  noticePeriod: "",
+  skills: "",
+  currentCompany: "",
+  previousCompanies: "",
+  totalExperience: "",
+  college: "",
+  collegeLocation: "",
+  graduatedYear: "",
+  linkedinProfile: "",
+  githubProfile: "",
+};
 export const postNewJobFormControls = [
   {
     label: "Company Name",
