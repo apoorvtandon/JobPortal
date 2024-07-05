@@ -12,8 +12,11 @@ import {
 import { useUser } from "@clerk/nextjs";
 import { createProfileAction } from "@/actions";
 import { createClient } from "@supabase/supabase-js";
- 
-const supabaseClient = createClient('https://pfpysvpxxkgqyhazmrxi.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmcHlzdnB4eGtncXloYXptcnhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk5OTkwMzUsImV4cCI6MjAzNTU3NTAzNX0.vIENVhEghJVuYTjOJ-pdq3cRiWokB4k9_Qw3OYTacng')
+
+const supabaseClient = createClient(
+  "https://pfpysvpxxkgqyhazmrxi.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmcHlzdnB4eGtncXloYXptcnhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk5OTkwMzUsImV4cCI6MjAzNTU3NTAzNX0.vIENVhEghJVuYTjOJ-pdq3cRiWokB4k9_Qw3OYTacng"
+);
 
 function OnBoard() {
   const [currentTab, setCurrentTab] = useState("candidate");
@@ -28,17 +31,10 @@ function OnBoard() {
   const currentAuthUser = useUser();
   const { user } = currentAuthUser;
 
-   
-
-   
-
-  
-
   function handleFileChange(event) {
     event.preventDefault();
-    
+
     setFile(event.target.files[0]);
-    
   }
   async function handleUploadPdfToSupabase() {
     const { data, error } = await supabaseClient.storage
@@ -59,7 +55,6 @@ function OnBoard() {
     if (file) handleUploadPdfToSupabase();
   }, [file]);
 
- 
   function handleTabChange(value) {
     setCurrentTab(value);
   }
@@ -78,7 +73,7 @@ function OnBoard() {
       (key) => candidateFormData[key].trim() !== ""
     );
   }
-console.log(candidateFormData)
+  console.log(candidateFormData);
   async function createProfile() {
     const data =
       currentTab === "candidate"
@@ -100,8 +95,6 @@ console.log(candidateFormData)
     await createProfileAction(data, "/onboard");
   }
 
-   
-
   return (
     <div className="bg-white">
       <Tabs value={currentTab} onValueChange={handleTabChange}>
@@ -122,7 +115,7 @@ console.log(candidateFormData)
             formData={candidateFormData}
             setFormData={setCandidateFormData}
             formControls={candidateOnboardFormControls}
-            buttonText={"Onboard as candidate"}           
+            buttonText={"Onboard as candidate"}
             isBtnDisabled={!handleCandidateFormValid()}
             handleFileChange={handleFileChange}
           />
